@@ -1,1 +1,14 @@
-[X, Y, Z, Mystery, In, Out]
+function parse3x3x3(bytes) {
+    let cube = [];
+    for (let i = 0; i < 27; i++) {
+        cube.push({
+            X: bytes[i*6 + 0],
+            Y: bytes[i*6 + 1],
+            Z: bytes[i*6 + 2],
+            Mystery: bytes[i*6 + 3],
+            In: bytes[i*6 + 4],
+            Out: bytes[i*6 + 5]
+        });
+    }
+    return cube;
+}
