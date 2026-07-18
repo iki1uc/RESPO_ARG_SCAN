@@ -1,0 +1,4 @@
+async function loadRAM() {
+    const res = await fetch("RAW/RAM/ram.raw");
+    return new Uint8Array(await res.arrayBuffer());
+}
