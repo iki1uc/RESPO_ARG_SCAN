@@ -1,0 +1,4 @@
+1function loadHW() {
+    const res = await fetch("RAW/HW.raw");
+    return new Uint8Array(await res.arrayBuffer());
+}
