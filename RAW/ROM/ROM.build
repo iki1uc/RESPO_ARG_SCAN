@@ -1,1 +1,14 @@
+CPU.raw
 
+GPU.raw
+
+RAM.raw
+µ.raw (CPU, GPU, RAM)
+        ↓
+3x3x3.raw        ← Hardware‑Grundwürfel
+        ↓
+81,room          ← Block‑Expansion
+        ↓
+9hoch9.room      ← Matrix‑Erweiterung
+        ↓
+ROM.build        ← Vector‑Dreieck + Axiom‑Dreieck + Geo
