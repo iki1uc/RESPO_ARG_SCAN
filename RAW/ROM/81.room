@@ -1,2 +1,9 @@
-3×3×3 = 27
-27 × 3 = 81
+function expand81(cube) {
+    let block = [];
+    cube.forEach(p => {
+        block.push(p);
+        block.push({ ...p, X: p.X + 1 });
+        block.push({ ...p, Y: p.Y + 1 });
+    });
+    return block;
+}
