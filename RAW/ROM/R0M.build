@@ -1,0 +1,13 @@
+function renderROMGeo() {
+    const canvas = document.getElementById("romCanvas");
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0,0,600,600);
+
+    ROM.geo.points.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(300 + p.X, 300 + p.Y, 4, 0, Math.PI*2);
+        ctx.strokeStyle = "#4ec3ff";
+        ctx.stroke();
+    });
+}
