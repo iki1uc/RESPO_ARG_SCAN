@@ -1,1 +1,5 @@
+async function loadGPU() {
+    const res = await fetch("RAW/GPU/gpu.raw");
+    return new Uint8Array(await res.arrayBuffer());
+}
 
