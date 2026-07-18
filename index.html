@@ -21,7 +21,7 @@
             border-radius: 8px;
             border: 1px solid #333;
         }
-        code {
+        code, pre {
             background: #222;
             padding: 5px;
             border-radius: 4px;
@@ -32,165 +32,134 @@
 </head>
 <body>
 
+<!-- ENGINE AUSGABE MUSS OBEN SEIN -->
+<div class="box">
+    <h2>RAW6D – Scan‑Ausgabe</h2>
+    <pre id="scan-output">Noch keine Datei geladen.</pre>
+</div>
+
+<div class="box">
+    <h2>Geometrie‑Körper aus Schatten</h2>
+    <pre id="geo-output">Noch kein Körper erzeugt.</pre>
+</div>
+
+<!-- AB HIER DEIN VIEWER -->
 <h1>RESPO_ARG_SCAN – Public Argument‑Scan Layer</h1>
 <p>Öffentliche Darstellung der Multi‑Layer‑Struktur und RAW6D‑Container‑Verknüpfung.</p>
 
-<!-- MODULE INFO -->
 <div class="box">
     <h2>Modul‑Info (Public‑Layer)</h2>
-    <code>
-{
-  "id": "RESPO_ARG_SCAN1",
-  "layer": "arg-scan",
-  "public": true,
-  "purpose": "Public Argument‑Scan Ebene"
-}
-    </code>
+    <code>{ "id": "RESPO_ARG_SCAN1", "layer": "arg-scan", "public": true }</code>
 </div>
 
-<!-- MULTILAYER MODULE -->
 <div class="box">
     <h2>Multi‑Layer Modul</h2>
-    <code>
-{
-  "module": "MultiLayer",
-  "layers": [
-    "Public",
-    "Scan",
-    "VISIO-6D",
-    "RAW6D-Container"
-  ],
-  "purpose": "Mehrschichtige Darstellung ohne interne Mechanik"
-}
-    </code>
+    <code>{ "module": "MultiLayer", "layers": ["Public","Scan","VISIO-6D","RAW6D-Container"] }</code>
 </div>
 
-<!-- VISIO 6D LAYER -->
 <div class="box">
     <h2>VISIO‑6D Layer</h2>
-    <code>
-{
-  "visio-6d": {
-    "dimensions": ["Y", "X", "Z", "Mystery", "In", "Out"],
-    "public": true,
-    "purpose": "6D‑Darstellung der Public‑Ebene"
-  }
-}
-    </code>
+    <code>{ "visio-6d": { "dimensions": ["Y","X","Z","Mystery","In","Out"] } }</code>
 </div>
 
-<!-- RAW6D LINK -->
 <div class="box">
     <h2>RAW6D‑Link</h2>
-    <code>
-{
-  "link": "RESPO_ARG_SCAN → RAW6D",
-  "container": "V_RAW6D.codec",
-  "scan-layer": "arg-scan",
-  "axes": ["YXT", "BHT"],
-  "respo": ["VECTOR", "TECH", "AXIOM"],
-  "public": true,
-  "purpose": "Bindet Video-Container an Argument-Scan-Ebene"
-}
-    </code>
+    <code>{ "link": "RESPO_ARG_SCAN → RAW6D", "axes": ["YXT","BHT"], "respo": ["VECTOR","TECH","AXIOM"] }</code>
 </div>
 
-<!-- RAW6D HEADER -->
 <div class="box">
     <h2>RAW6D‑Header</h2>
-    <code>
-{
-  "codec_id": "V_RAW6D",
-  "version": "1.0",
-  "container": "r6d",
-  "dimensions": {
-    "width": null,
-    "height": null,
-    "depth": 6
-  },
-  "axes": {
-    "spatial": "YXT",
-    "image": "BHT"
-  },
-  "respo": {
-    "mode": "VECTOR",
-    "tech": "TECH",
-    "axiom": "AXIOM"
-  },
-  "timing": {
-    "timecode": null,
-    "frame_count": null,
-    "duration": null
-  },
-  "id": {
-    "uuid": null,
-    "segment": null
-  }
-}
-    </code>
+    <code>{ "codec_id": "V_RAW6D", "container": "r6d", "depth": 6 }</code>
 </div>
 
-<!-- RAW6D FRAME -->
 <div class="box">
     <h2>RAW6D‑Frame Layout</h2>
-    <code>
-{
-  "frame": {
-    "index": null,
-    "pixel_block": {
-      "format": "RGB/YUV",
-      "data": "raw"
-    },
-    "depth_block": {
-      "enabled": true,
-      "data": "raw-depth"
-    },
-    "motion_block": {
-      "enabled": true,
-      "vectors": "mv-data"
-    },
-    "mystery_block": {
-      "enabled": true,
-      "pattern": "mystery-map"
-    },
-    "axes": {
-      "in": null,
-      "out": null
-    },
-    "timing": {
-      "pts": null,
-      "dts": null,
-      "duration": null
-    }
-  }
-}
-    </code>
+    <code>{ "frame": { "pixel_block": "raw", "depth_block": true, "motion_block": true } }</code>
 </div>
 
-<!-- RAW6D META -->
 <div class="box">
     <h2>RAW6D‑Meta Schema</h2>
-    <code>
-{
-  "meta": {
-    "respo_achse": "VECTOR",
-    "nc_level": "NC²",
-    "ultra_score": 100,
-    "vector_level": "ULTRA",
-    "allxall_index": null,
-    "mystery_signature": null,
-    "scale_info": {
-      "original_width": null,
-      "original_height": null,
-      "scaled_width": null,
-      "scaled_height": null
-    },
-    "public": true,
-    "layer": "arg-scan"
-  }
-}
-    </code>
+    <code>{ "meta": { "respo_achse": "VECTOR", "nc_level": "NC²" } }</code>
 </div>
+
+<!-- ENGINE SCRIPT GANZ UNTEN -->
+<script>
+function extractShadow(bytes) {
+    let seq = [];
+    for (let i = 0; i < bytes.length; i += Math.floor(bytes.length / 32) || 1) {
+        seq.push(bytes[i]);
+    }
+    let shadow = seq.map(b => b.toString(16).padStart(2, "0")).join(" ");
+    let density = seq.length;
+    let status = "Minimaler Schatten";
+    if (density > 16) status = "Kleiner Schatten";
+    if (density > 24) status = "Mittlerer Schatten";
+    if (density > 30) status = "Starker Schatten";
+    return { "shadow-seq": shadow, "punkte": density, "status": status };
+}
+
+function buildGeometry(bytes) {
+    let points = [];
+    for (let i = 0; i < bytes.length; i += Math.floor(bytes.length / 64) || 1) {
+        points.push(bytes[i]);
+    }
+    let geo = points.map((p, i) => ({
+        x: i,
+        y: p % 256,
+        z: (p * i) % 128
+    }));
+    return {
+        "punkte": geo.length,
+        "komplexität": geo.length > 40 ? "mittel" : "gering",
+        "körper": geo.slice(0, 32)
+    };
+}
+
+const pools = [
+    "CPU/cpu.raw",
+    "GPU/raw.raw",
+    "RAM/ram.raw",
+    "ROM/rom.raw",
+    "POS/pos.raw",
+    "FUSION/fus.raw",
+    "TECH/raw.raw",
+    "HOME/home.raw",
+    "BODY/body.raw",
+    "SCRIPT/scr.raw",
+    "RAW6D/6d1d.r6d",
+    "RAW6D/6d3.r6d",
+    "RAW6D/test.r6d"
+];
+
+async function loadAllPools() {
+    let results = [];
+    for (const file of pools) {
+        try {
+            const response = await fetch(file);
+            const buffer = await response.arrayBuffer();
+            const bytes = new Uint8Array(buffer);
+
+            const shadow = extractShadow(bytes);
+            const body = buildGeometry(bytes);
+
+            results.push({
+                file: file,
+                size: bytes.length + " bytes",
+                shadow: shadow,
+                body: body
+            });
+
+        } catch (e) {
+            results.push({ file: file, error: "Konnte Datei nicht laden" });
+        }
+    }
+
+    document.getElementById("geo-output").textContent =
+        JSON.stringify(results, null, 2);
+}
+
+loadAllPools();
+</script>
 
 </body>
 </html>
