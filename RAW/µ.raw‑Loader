@@ -1,0 +1,4 @@
+async function loadMicroRaw() {
+    const res = await fetch("RAW/µ.raw");
+    return new Uint8Array(await res.arrayBuffer());
+}
