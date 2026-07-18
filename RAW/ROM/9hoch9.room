@@ -1,2 +1,7 @@
-
-81 Punkte → 9×9 Matrix
+function expand9x9(block) {
+    let matrix = [];
+    for (let i = 0; i < 9; i++) {
+        matrix.push(block.slice(i*9, i*9 + 9));
+    }
+    return matrix;
+}
