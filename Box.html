@@ -1,3 +1,198 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>RESPO_ARG_SCAN – MultiLayer RAW6D Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #4ec3ff;
+        }
+        .box {
+            background: #1b1b1b;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        code, pre {
+            background: #222;
+            padding: 5px;
+            border-radius: 4px;
+            display: block;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<h1>RESPO_ARG_SCAN – Public Argument‑Scan Layer</h1>
+<p>Öffentliche Darstellung der Multi‑Layer‑Struktur und RAW6D‑Container‑Verknüpfung.</p>
+
+<!-- MODULE INFO -->
+<div class="box">
+    <h2>Modul‑Info (Public‑Layer)</h2>
+    <code>
+{
+  "id": "RESPO_ARG_SCAN1",
+  "layer": "arg-scan",
+  "public": true,
+  "purpose": "Public Argument‑Scan Ebene"
+}
+    </code>
+</div>
+
+<!-- MULTILAYER MODULE -->
+<div class="box">
+    <h2>Multi‑Layer Modul</h2>
+    <code>
+{
+  "module": "MultiLayer",
+  "layers": [
+    "Public",
+    "Scan",
+    "VISIO-6D",
+    "RAW6D-Container"
+  ],
+  "purpose": "Mehrschichtige Darstellung ohne interne Mechanik"
+}
+    </code>
+</div>
+
+<!-- VISIO 6D LAYER -->
+<div class="box">
+    <h2>VISIO‑6D Layer</h2>
+    <code>
+{
+  "visio-6d": {
+    "dimensions": ["Y", "X", "Z", "Mystery", "In", "Out"],
+    "public": true,
+    "purpose": "6D‑Darstellung der Public‑Ebene"
+  }
+}
+    </code>
+</div>
+
+<!-- RAW6D LINK -->
+<div class="box">
+    <h2>RAW6D‑Link</h2>
+    <code>
+{
+  "link": "RESPO_ARG_SCAN → RAW6D",
+  "container": "V_RAW6D.codec",
+  "scan-layer": "arg-scan",
+  "axes": ["YXT", "BHT"],
+  "respo": ["VECTOR", "TECH", "AXIOM"],
+  "public": true,
+  "purpose": "Bindet Video-Container an Argument-Scan-Ebene"
+}
+    </code>
+</div>
+
+<!-- RAW6D HEADER -->
+<div class="box">
+    <h2>RAW6D‑Header</h2>
+    <code>
+{
+  "codec_id": "V_RAW6D",
+  "version": "1.0",
+  "container": "r6d",
+  "dimensions": {
+    "width": null,
+    "height": null,
+    "depth": 6
+  },
+  "axes": {
+    "spatial": "YXT",
+    "image": "BHT"
+  },
+  "respo": {
+    "mode": "VECTOR",
+    "tech": "TECH",
+    "axiom": "AXIOM"
+  },
+  "timing": {
+    "timecode": null,
+    "frame_count": null,
+    "duration": null
+  },
+  "id": {
+    "uuid": null,
+    "segment": null
+  }
+}
+    </code>
+</div>
+
+<!-- RAW6D FRAME -->
+<div class="box">
+    <h2>RAW6D‑Frame Layout</h2>
+    <code>
+{
+  "frame": {
+    "index": null,
+    "pixel_block": {
+      "format": "RGB/YUV",
+      "data": "raw"
+    },
+    "depth_block": {
+      "enabled": true,
+      "data": "raw-depth"
+    },
+    "motion_block": {
+      "enabled": true,
+      "vectors": "mv-data"
+    },
+    "mystery_block": {
+      "enabled": true,
+      "pattern": "mystery-map"
+    },
+    "axes": {
+      "in": null,
+      "out": null
+    },
+    "timing": {
+      "pts": null,
+      "dts": null,
+      "duration": null
+    }
+  }
+}
+    </code>
+</div>
+
+<!-- RAW6D META -->
+<div class="box">
+    <h2>RAW6D‑Meta Schema</h2>
+    <code>
+{
+  "meta": {
+    "respo_achse": "VECTOR",
+    "nc_level": "NC²",
+    "ultra_score": 100,
+    "vector_level": "ULTRA",
+    "allxall_index": null,
+    "mystery_signature": null,
+    "scale_info": {
+      "original_width": null,
+      "original_height": null,
+      "scaled_width": null,
+      "scaled_height": null
+    },
+    "public": true,
+    "layer": "arg-scan"
+  }
+}
+    </code>
+</div>
+
+<!-- RAW6D SCAN BOX -->
 <div class="box">
     <h2>RAW6D – Scan‑Ausgabe</h2>
     <pre id="scan-output">Noch keine Datei geladen.</pre>
@@ -10,7 +205,6 @@ async function loadR6D(path) {
         const buffer = await response.arrayBuffer();
         const bytes = new Uint8Array(buffer);
 
-        // Hex-Dump erzeugen
         let hex = "";
         for (let i = 0; i < bytes.length; i++) {
             hex += bytes[i].toString(16).padStart(2, "0");
@@ -27,40 +221,21 @@ async function loadR6D(path) {
             missing: []
         };
 
-        // HEADER-Signatur
-        if (hex.includes("565f5241573644")) { // "V_RAW6D" in Hex
-            output.header = "Header-Signatur erkannt";
-        } else {
-            output.missing.push("Header-Signatur fehlt");
-        }
+        if (hex.includes("565f5241573644")) output.header = "Header-Signatur erkannt";
+        else output.missing.push("Header-Signatur fehlt");
 
-        // FRAME-Signatur
-        if (hex.includes("6672616d65")) { // "frame"
-            output.frame = "Frame-Signatur erkannt";
-        } else {
-            output.missing.push("Frame-Signatur fehlt");
-        }
+        if (hex.includes("6672616d65")) output.frame = "Frame-Signatur erkannt";
+        else output.missing.push("Frame-Signatur fehlt");
 
-        // META-Signatur
-        if (hex.includes("6d657461")) { // "meta"
-            output.meta = "Meta-Signatur erkannt";
-        } else {
-            output.missing.push("Meta-Signatur fehlt");
-        }
+        if (hex.includes("6d657461")) output.meta = "Meta-Signatur erkannt";
+        else output.missing.push("Meta-Signatur fehlt");
 
-        // AXES-Signatur
-        if (hex.includes("595854") || hex.includes("424854")) { // YXT / BHT
-            output.axes = "Achsen-Signatur erkannt";
-        } else {
-            output.missing.push("Achsen-Signatur fehlt");
-        }
+        if (hex.includes("595854") || hex.includes("424854")) output.axes = "Achsen-Signatur erkannt";
+        else output.missing.push("Achsen-Signatur fehlt");
 
-        // RESPO-Signatur
-        if (hex.includes("564543544f52") || hex.includes("54454348") || hex.includes("4158494f4d")) {
+        if (hex.includes("564543544f52") || hex.includes("54454348") || hex.includes("4158494f4d"))
             output.respo = "Respo-Signatur erkannt";
-        } else {
-            output.missing.push("Respo-Signatur fehlt");
-        }
+        else output.missing.push("Respo-Signatur fehlt");
 
         document.getElementById("scan-output").textContent =
             JSON.stringify(output, null, 2);
@@ -71,6 +246,8 @@ async function loadR6D(path) {
     }
 }
 
-// Beispiel: eine deiner Dateien laden
 loadR6D("RAW6D/6d3.r6d");
 </script>
+
+</body>
+</html>
