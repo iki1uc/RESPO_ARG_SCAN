@@ -1,4 +1,0 @@
-async function loadCPU() {
-    const res = await fetch("RAW/CPU/cpu.raw");
-    return new Uint8Array(await res.arrayBuffer());
-}
