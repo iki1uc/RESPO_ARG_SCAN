@@ -1,23 +1,21 @@
 async function BOOTload() {
     window.ROMPOOL = {};
 
-    const files = [
+    const romFiles = [
         "RAW/ROM/3x3x3.raw",
         "RAW/ROM/81.room",
         "RAW/ROM/9hoch9.room",
         "RAW/ROM/ROM.build",
-        "RAW/µ.raw",
-        "RAW/HW.raw"
+        "RAW/ROM/Pipeline.rom"
     ];
 
-    for (const f of files) {
+    for (const file of romFiles) {
         try {
-            const res = await fetch(f);
+            const res = await fetch(file);
             const buf = await res.arrayBuffer();
-            ROMPOOL[f] = new Uint8Array(buf);
+            ROMPOOL[file] = new Uint8Array(buf);
         } catch {
-            ROMPOOL[f] = null;
+            ROMPOOL[file] = null;
         }
     }
 }
-
