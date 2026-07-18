@@ -7,11 +7,18 @@
 async function loadR6D(path) {
     try {
         const response = await fetch(path);
-        const text = await response.text();
+        const buffer = await response.arrayBuffer();
+        const bytes = new Uint8Array(buffer);
+
+        // Hex-Dump erzeugen
+        let hex = "";
+        for (let i = 0; i < bytes.length; i++) {
+            hex += bytes[i].toString(16).padStart(2, "0");
+        }
 
         const output = {
             file: path,
-            size: text.length + " bytes",
+            size: bytes.length + " bytes",
             header: null,
             frame: null,
             meta: null,
@@ -20,39 +27,39 @@ async function loadR6D(path) {
             missing: []
         };
 
-        // HEADER
-        if (text.includes("codec_id")) {
-            output.header = "Header erkannt";
+        // HEADER-Signatur
+        if (hex.includes("565f5241573644")) { // "V_RAW6D" in Hex
+            output.header = "Header-Signatur erkannt";
         } else {
-            output.missing.push("Header fehlt");
+            output.missing.push("Header-Signatur fehlt");
         }
 
-        // FRAME
-        if (text.includes("frame")) {
-            output.frame = "Frame‑Layout erkannt";
+        // FRAME-Signatur
+        if (hex.includes("6672616d65")) { // "frame"
+            output.frame = "Frame-Signatur erkannt";
         } else {
-            output.missing.push("Frame‑Layout fehlt");
+            output.missing.push("Frame-Signatur fehlt");
         }
 
-        // META
-        if (text.includes("meta")) {
-            output.meta = "Meta‑Schema erkannt";
+        // META-Signatur
+        if (hex.includes("6d657461")) { // "meta"
+            output.meta = "Meta-Signatur erkannt";
         } else {
-            output.missing.push("Meta‑Schema fehlt");
+            output.missing.push("Meta-Signatur fehlt");
         }
 
-        // AXES
-        if (text.includes("YXT") || text.includes("BHT")) {
-            output.axes = "Achsen erkannt";
+        // AXES-Signatur
+        if (hex.includes("595854") || hex.includes("424854")) { // YXT / BHT
+            output.axes = "Achsen-Signatur erkannt";
         } else {
-            output.missing.push("Achsen fehlen");
+            output.missing.push("Achsen-Signatur fehlt");
         }
 
-        // RESPO
-        if (text.includes("VECTOR") || text.includes("TECH") || text.includes("AXIOM")) {
-            output.respo = "Respo‑Ableitung erkannt";
+        // RESPO-Signatur
+        if (hex.includes("564543544f52") || hex.includes("54454348") || hex.includes("4158494f4d")) {
+            output.respo = "Respo-Signatur erkannt";
         } else {
-            output.missing.push("Respo‑Ableitung fehlt");
+            output.missing.push("Respo-Signatur fehlt");
         }
 
         document.getElementById("scan-output").textContent =
