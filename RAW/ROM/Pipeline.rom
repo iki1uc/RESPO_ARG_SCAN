@@ -1,0 +1,9 @@
+µ.raw (CPU, GPU, RAM)
+        ↓
+3x3x3.raw        ← Stufe 1: Hardware‑Grundwürfel
+        ↓
+81.room          ← Stufe 2: Block‑Expansion
+        ↓
+9hoch9.room      ← Stufe 3: Matrix‑Erweiterung
+        ↓
+ROM.build        ← Stufe 4: Geo‑Erzeugung
