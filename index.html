@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>RESPO_ARG_SCAN – RAW6D Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #4ec3ff;
+        }
+        .box {
+            background: #1b1b1b;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        code {
+            background: #222;
+            padding: 5px;
+            border-radius: 4px;
+            display: block;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<h1>RESPO_ARG_SCAN – Public Argument‑Scan Layer</h1>
+<p>Öffentliche Darstellung der RAW6D‑Container‑Verknüpfung.</p>
+
+<div class="box">
+    <h2>Modul‑Info</h2>
+    <code id="module-info">
+{
+  "id": "RESPO_ARG_SCAN1",
+  "layer": "arg-scan",
+  "public": true,
+  "purpose": "Public Argument‑Scan Ebene"
+}
+    </code>
+</div>
+
+<div class="box">
+    <h2>RAW6D‑Link</h2>
+    <code id="raw6d-link">
+{
+  "link": "RESPO_ARG_SCAN → RAW6D",
+  "container": "V_RAW6D.codec",
+  "scan-layer": "arg-scan",
+  "axes": ["YXT", "BHT"],
+  "respo": ["VECTOR", "TECH", "AXIOM"],
+  "public": true,
+  "purpose": "Bindet Video-Container an Argument-Scan-Ebene"
+}
+    </code>
+</div>
+
+<div class="box">
+    <h2>RAW6D‑Header</h2>
+    <code id="raw6d-header">
+{
+  "codec_id": "V_RAW6D",
+  "version": "1.0",
+  "container": "r6d",
+  "dimensions": {
+    "width": null,
+    "height": null,
+    "depth": 6
+  },
+  "axes": {
+    "spatial": "YXT",
+    "image": "BHT"
+  },
+  "respo": {
+    "mode": "VECTOR",
+    "tech": "TECH",
+    "axiom": "AXIOM"
+  },
+  "timing": {
+    "timecode": null,
+    "frame_count": null,
+    "duration": null
+  },
+  "id": {
+    "uuid": null,
+    "segment": null
+  }
+}
+    </code>
+</div>
+
+<div class="box">
+    <h2>RAW6D‑Frame Layout</h2>
+    <code id="raw6d-frame">
+{
+  "frame": {
+    "index": null,
+    "pixel_block": {
+      "format": "RGB/YUV",
+      "data": "raw"
+    },
+    "depth_block": {
+      "enabled": true,
+      "data": "raw-depth"
+    },
+    "motion_block": {
+      "enabled": true,
+      "vectors": "mv-data"
+    },
+    "mystery_block": {
+      "enabled": true,
+      "pattern": "mystery-map"
+    },
+    "axes": {
+      "in": null,
+      "out": null
+    },
+    "timing": {
+      "pts": null,
+      "dts": null,
+      "duration": null
+    }
+  }
+}
+    </code>
+</div>
+
+<div class="box">
+    <h2>RAW6D‑Meta Schema</h2>
+    <code id="raw6d-meta">
+{
+  "meta": {
+    "respo_achse": "VECTOR",
+    "nc_level": "NC²",
+    "ultra_score": 100,
+    "vector_level": "ULTRA",
+    "allxall_index": null,
+    "mystery_signature": null,
+    "scale_info": {
+      "original_width": null,
+      "original_height": null,
+      "scaled_width": null,
+      "scaled_height": null
+    },
+    "public": true,
+    "layer": "arg-scan"
+  }
+}
+    </code>
+</div>
+
+</body>
+</html>
