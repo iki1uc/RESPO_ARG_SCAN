@@ -1,1 +1,11 @@
+NC_RAW_HEADER {
+    W: uint16,        // Breite
+    H: uint16,        // Höhe
+    D: uint16,        // Tiefe
+    U: uint16,        // U-Dimension
+    E: uint16,        // Ebene
+    F: uint16,        // Faktor
+    COUNT: uint16,    // Anzahl µ.raw Dateien
+    RESERVED: 32B     // Platz für Zukunft
+}
 
