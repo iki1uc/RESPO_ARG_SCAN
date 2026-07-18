@@ -1,0 +1,9 @@
+clock, voltage, temp, load, power, latency
+CPU.raw → GPU.raw → RAM.raw → ROM.build
+3x3x3.raw
+81,room
+9hoch9.room
+ROM.build
+vector_triangle
+axiom_triangle
+geo.points
