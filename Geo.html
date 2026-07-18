@@ -1,17 +1,10 @@
-<div class="box">
-    <h2>Geometrie‑Körper aus Schatten</h2>
-    <pre id="geo-output">Noch kein Körper erzeugt.</pre>
-</div>
-
 <script>
 function buildGeometry(bytes) {
-    // Schritt 1: Schattenpunkte extrahieren
     let points = [];
     for (let i = 0; i < bytes.length; i += Math.floor(bytes.length / 64) || 1) {
         points.push(bytes[i]);
     }
 
-    // Schritt 2: Geometrie erzeugen (normierte Werte)
     let geo = points.map((p, i) => {
         return {
             x: i,
@@ -20,13 +13,10 @@ function buildGeometry(bytes) {
         };
     });
 
-    // Schritt 3: Körper ableiten (Public‑Ebene)
-    let body = {
+    return {
         "punkte": geo.length,
         "komplexität": geo.length > 40 ? "mittel" : "gering",
-        "körper": geo.slice(0, 32) // Public‑Ebene: nur ein Ausschnitt
+        "körper": geo.slice(0, 32)
     };
-
-    return body;
 }
 </script>
