@@ -1,47 +1,6 @@
-export function ROMbuild(cpuRaw, gpuRaw, ramRaw) {
-
-    function µrawToVector(µ) {
-        return {
-            x: µ.clock,
-            y: µ.temp,
-            z: µ.power,
-            mystery: µ.voltage,
-            in: µ.load,
-            out: µ.latency
-        };
-    }
-
-    const cpu = µrawToVector(cpuRaw);
-    const gpu = µrawToVector(gpuRaw);
-    const ram = µrawToVector(ramRaw);
-
-    function buildVectorTriangle(cpu, gpu, ram) {
-        return [
-            { X: cpu.x, Y: cpu.y, Z: cpu.z },
-            { X: gpu.x, Y: gpu.y, Z: gpu.z },
-            { X: ram.x, Y: ram.y, Z: ram.z }
-        ];
-    }
-
-    function buildAxiomTriangle(cpu, gpu, ram) {
-        return [
-            {
-                X: (cpu.x + gpu.x + ram.x) / 3,
-                Y: cpu.mystery + gpu.mystery + ram.mystery,
-                Z: (cpu.in + gpu.in + ram.in) - (cpu.out + gpu.out + ram.out)
-            }
-        ];
-    }
-
-    return {
-        vector_triangle: buildVectorTriangle(cpu, gpu, ram),
-        axiom_triangle: buildAxiomTriangle(cpu, gpu, ram),
-        geo: {
-            points: [
-                ...buildVectorTriangle(cpu, gpu, ram),
-                ...buildAxiomTriangle(cpu, gpu, ram)
-            ],
-            complexity: 4
-        }
-    };
+function ROMbuildFromMatrix(matrix) {
+    const cpu = matrix[0][0];
+    const gpu = matrix[4][4];
+    const ram = matrix[8][8];
+    return ROMbuild(cpu, gpu, ram);
 }
