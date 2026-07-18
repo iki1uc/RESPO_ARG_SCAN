@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>RESPO_ARG_SCAN – RAW6D Viewer</title>
+    <title>RESPO_ARG_SCAN – MultiLayer RAW6D Viewer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,11 +33,12 @@
 <body>
 
 <h1>RESPO_ARG_SCAN – Public Argument‑Scan Layer</h1>
-<p>Öffentliche Darstellung der RAW6D‑Container‑Verknüpfung.</p>
+<p>Öffentliche Darstellung der Multi‑Layer‑Struktur und RAW6D‑Container‑Verknüpfung.</p>
 
+<!-- MODULE INFO -->
 <div class="box">
-    <h2>Modul‑Info</h2>
-    <code id="module-info">
+    <h2>Modul‑Info (Public‑Layer)</h2>
+    <code>
 {
   "id": "RESPO_ARG_SCAN1",
   "layer": "arg-scan",
@@ -47,9 +48,41 @@
     </code>
 </div>
 
+<!-- MULTILAYER MODULE -->
+<div class="box">
+    <h2>Multi‑Layer Modul</h2>
+    <code>
+{
+  "module": "MultiLayer",
+  "layers": [
+    "Public",
+    "Scan",
+    "VISIO-6D",
+    "RAW6D-Container"
+  ],
+  "purpose": "Mehrschichtige Darstellung ohne interne Mechanik"
+}
+    </code>
+</div>
+
+<!-- VISIO 6D LAYER -->
+<div class="box">
+    <h2>VISIO‑6D Layer</h2>
+    <code>
+{
+  "visio-6d": {
+    "dimensions": ["Y", "X", "Z", "Mystery", "In", "Out"],
+    "public": true,
+    "purpose": "6D‑Darstellung der Public‑Ebene"
+  }
+}
+    </code>
+</div>
+
+<!-- RAW6D LINK -->
 <div class="box">
     <h2>RAW6D‑Link</h2>
-    <code id="raw6d-link">
+    <code>
 {
   "link": "RESPO_ARG_SCAN → RAW6D",
   "container": "V_RAW6D.codec",
@@ -62,9 +95,10 @@
     </code>
 </div>
 
+<!-- RAW6D HEADER -->
 <div class="box">
     <h2>RAW6D‑Header</h2>
-    <code id="raw6d-header">
+    <code>
 {
   "codec_id": "V_RAW6D",
   "version": "1.0",
@@ -96,9 +130,10 @@
     </code>
 </div>
 
+<!-- RAW6D FRAME -->
 <div class="box">
     <h2>RAW6D‑Frame Layout</h2>
-    <code id="raw6d-frame">
+    <code>
 {
   "frame": {
     "index": null,
@@ -132,9 +167,10 @@
     </code>
 </div>
 
+<!-- RAW6D META -->
 <div class="box">
     <h2>RAW6D‑Meta Schema</h2>
-    <code id="raw6d-meta">
+    <code>
 {
   "meta": {
     "respo_achse": "VECTOR",
