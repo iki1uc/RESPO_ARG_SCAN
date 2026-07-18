@@ -1,0 +1,69 @@
+<div class="box">
+    <h2>RAW6D – Scan‑Ausgabe</h2>
+    <pre id="scan-output">Noch keine Datei geladen.</pre>
+</div>
+
+<script>
+async function loadR6D(path) {
+    try {
+        const response = await fetch(path);
+        const text = await response.text();
+
+        const output = {
+            file: path,
+            size: text.length + " bytes",
+            header: null,
+            frame: null,
+            meta: null,
+            axes: null,
+            respo: null,
+            missing: []
+        };
+
+        // HEADER
+        if (text.includes("codec_id")) {
+            output.header = "Header erkannt";
+        } else {
+            output.missing.push("Header fehlt");
+        }
+
+        // FRAME
+        if (text.includes("frame")) {
+            output.frame = "Frame‑Layout erkannt";
+        } else {
+            output.missing.push("Frame‑Layout fehlt");
+        }
+
+        // META
+        if (text.includes("meta")) {
+            output.meta = "Meta‑Schema erkannt";
+        } else {
+            output.missing.push("Meta‑Schema fehlt");
+        }
+
+        // AXES
+        if (text.includes("YXT") || text.includes("BHT")) {
+            output.axes = "Achsen erkannt";
+        } else {
+            output.missing.push("Achsen fehlen");
+        }
+
+        // RESPO
+        if (text.includes("VECTOR") || text.includes("TECH") || text.includes("AXIOM")) {
+            output.respo = "Respo‑Ableitung erkannt";
+        } else {
+            output.missing.push("Respo‑Ableitung fehlt");
+        }
+
+        document.getElementById("scan-output").textContent =
+            JSON.stringify(output, null, 2);
+
+    } catch (e) {
+        document.getElementById("scan-output").textContent =
+            "Fehler beim Laden der Datei.";
+    }
+}
+
+// Beispiel: eine deiner Dateien laden
+loadR6D("RAW6D/6d3.r6d");
+</script>
